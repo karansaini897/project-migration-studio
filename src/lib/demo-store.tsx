@@ -7,7 +7,7 @@ import type { AccountRow } from "@/lib/account-schema";
 import { createSeedData } from "@/data/mock-data";
 import type { AppStatus, DemoData, Role, User } from "@/data/types";
 
-const DATA_KEY = "aicte-demo-data-v1";
+const DATA_KEY = "aicte-demo-data-v2";
 const SESSION_KEY = "aicte-demo-session-v1";
 export const THEME_KEY = "aicte-demo-theme";
 
@@ -29,6 +29,7 @@ interface Store {
   updateUser: (id: string, patch: Partial<User>) => void;
   setAppStatus: (appId: string, status: AppStatus) => void;
   markRead: (id?: string) => void;
+  toggleRead: (id: string) => void;
   resetDemo: () => void;
 }
 
@@ -43,6 +44,7 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
   const [authReady, setAuthReady] = useState(false);
   const [account, setAccount] = useState<AccountRow | null>(null);
   const loadSeq = useRef(0);
+  const actorRef = useRef<{ name: string; role: Role } | null>(null);
 
   const loadAccount = useCallback(async (): Promise<AccountRow | null> => {
     const seq = ++loadSeq.current;
@@ -123,15 +125,28 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
       const app = d.applications.find((a) => a.id === appId);
       if (!app) return d;
       const now = new Date().toISOString();
+      const actor = actorRef.current;
+      const kind = status === "Query Raised" ? "correction" : status === "Under Review" ? "review" : "status";
       return {
         ...d,
         applications: d.applications.map((a) => (a.id === appId ? { ...a, status, updatedOn: now } : a)),
-        activity: [{ id: `act-${Date.now()}`, at: now, actor: "You", action: `marked ${status.toLowerCase()}`, target: app.ref, institutionId: app.institutionId }, ...d.activity],
+        activity: [{
+          id: `act-${Date.now()}`, at: now, actor: actor?.name ?? "You", actorRole: actor?.role ?? "admin",
+          action: `marked ${status.toLowerCase()}`, target: app.ref, institutionId: app.institutionId, detail: `Status: ${app.status} → ${status}`,
+        }, ...d.activity],
+        notifications: [{
+          id: `n-${Date.now()}`, at: now, kind, read: false, roles: ["admin", "institution"], institutionId: app.institutionId, appId,
+          title: kind === "correction" ? `Correction requested on ${app.ref}` : `${app.ref} ${status.toLowerCase()}`,
+          body: `${actor?.name ?? "A reviewer"} changed the status from ${app.status} to ${status} (demo action).`,
+        }, ...d.notifications],
       };
     }), []);
 
   const markRead = useCallback((id?: string) =>
     setData((d) => ({ ...d, notifications: d.notifications.map((n) => (!id || n.id === id ? { ...n, read: true } : n)) })), []);
+
+  const toggleRead = useCallback((id: string) =>
+    setData((d) => ({ ...d, notifications: d.notifications.map((n) => (n.id === id ? { ...n, read: !n.read } : n)) })), []);
 
   const resetDemo = useCallback(() => setData(createSeedData()), []);
 
@@ -147,9 +162,10 @@ export function DemoStoreProvider({ children }: { children: ReactNode }) {
     return demoUser;
   }, [account, demoUser]);
   const isDemo = !account && !!demoUser;
+  actorRef.current = user ? { name: user.name, role: user.role } : null;
 
   return (
-    <Ctx.Provider value={{ hydrated, data, user, isDemo, account, theme, setTheme, login, signInAccount, refreshAccount, logout, updateUser, setAppStatus, markRead, resetDemo }}>
+    <Ctx.Provider value={{ hydrated, data, user, isDemo, account, theme, setTheme, login, signInAccount, refreshAccount, logout, updateUser, setAppStatus, markRead, toggleRead, resetDemo }}>
       {children}
     </Ctx.Provider>
   );
