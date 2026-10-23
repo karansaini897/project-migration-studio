@@ -14,16 +14,133 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_setup: {
+        Row: {
+          completed_at: string
+          id: number
+        }
+        Insert: {
+          completed_at?: string
+          id: number
+        }
+        Update: {
+          completed_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          authorization_status: string | null
+          contact_email: string | null
+          course: string | null
+          created_at: string
+          created_by: string | null
+          date_of_birth: string | null
+          department: string | null
+          designation: string | null
+          employee_id: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          institution_code: string | null
+          institution_name: string | null
+          joining_date: string | null
+          permission_level: string | null
+          phone: string
+          photo_url: string | null
+          roll_number: string | null
+          status: Database["public"]["Enums"]["account_status"]
+          updated_at: string
+          username: string
+          year_semester: string | null
+        }
+        Insert: {
+          authorization_status?: string | null
+          contact_email?: string | null
+          course?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_of_birth?: string | null
+          department?: string | null
+          designation?: string | null
+          employee_id?: string | null
+          full_name: string
+          gender?: string | null
+          id: string
+          institution_code?: string | null
+          institution_name?: string | null
+          joining_date?: string | null
+          permission_level?: string | null
+          phone: string
+          photo_url?: string | null
+          roll_number?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          username: string
+          year_semester?: string | null
+        }
+        Update: {
+          authorization_status?: string | null
+          contact_email?: string | null
+          course?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_of_birth?: string | null
+          department?: string | null
+          designation?: string | null
+          employee_id?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          institution_code?: string | null
+          institution_name?: string | null
+          joining_date?: string | null
+          permission_level?: string | null
+          phone?: string
+          photo_url?: string | null
+          roll_number?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
+          updated_at?: string
+          username?: string
+          year_semester?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      account_status: "active" | "suspended" | "pending"
+      app_role: "admin" | "institution" | "faculty" | "student"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +267,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      account_status: ["active", "suspended", "pending"],
+      app_role: ["admin", "institution", "faculty", "student"],
+    },
   },
 } as const
