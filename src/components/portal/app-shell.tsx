@@ -128,7 +128,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <div className="lg:pl-64">
+      <div className="min-w-0 lg:pl-64">
         {isDemo ? (
           <div className="border-b border-warning/30 bg-warning-soft px-4 py-1.5 text-center text-xs text-warning">
             Demo mode — simulated persona <strong>{ROLE_LABEL[user.role]}</strong>. Not a real account; all records are fictional.
