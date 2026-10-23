@@ -52,7 +52,7 @@ export function PageHeader({ title, description, actions }: { title: string; des
 
 export function Panel({ title, action, children, className }: { title?: string; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <section className={cn("panel", className)}>
+    <section className={cn("panel min-w-0", className)}>
       {title && (
         <header className="flex items-center justify-between border-b px-5 py-3.5">
           <h2 className="text-sm font-semibold">{title}</h2>
