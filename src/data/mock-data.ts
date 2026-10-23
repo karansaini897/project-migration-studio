@@ -184,7 +184,7 @@ function buildNotifications(apps: Application[], certs: Certificate[], insts: In
     const left = -ago(c.expiresOn);
     if (left > 30 || left < -30) continue;
     out.push({
-      id: `n-${c.id}-e`, at: iso(Math.min(0, left - 30) > -365 ? Math.max(-ago(c.expiresOn) - 30, -20) : 0), kind: "expiry", institutionId: c.institutionId, read: left < 0,
+      id: `n-${c.id}-e`, at: iso(Math.min(0, Math.max(left - 30, -20))), kind: "expiry", institutionId: c.institutionId, read: left < 0,
       title: left < 0 ? `${c.name} expired ${-left} days ago` : `${c.name} expires in ${left} days`,
       body: `${name(c.institutionId)} — upload a renewed certificate.`, roles: ["admin", "institution", "faculty"],
     });
@@ -193,5 +193,5 @@ function buildNotifications(apps: Application[], certs: Certificate[], insts: In
     { id: "n-fac-1", at: iso(-3), kind: "general", title: "Faculty register update requested", body: "Please confirm your qualification details by Friday.", read: false, roles: ["faculty"], institutionId: "inst-1" },
     { id: "n-stu-1", at: iso(-4), kind: "general", title: "Scholarship document window open", body: "Students may upload fee receipts for the demo scholarship drive.", read: false, roles: ["student"], institutionId: "inst-1" },
   );
-  return out.map((n) => (new Date(n.at).getTime() > Date.now() ? { ...n, at: iso(0) } : n)).sort((a, b) => b.at.localeCompare(a.at));
+  return out.sort((a, b) => b.at.localeCompare(a.at));
 }
