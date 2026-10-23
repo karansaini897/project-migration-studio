@@ -125,11 +125,16 @@ function build(): DemoData {
           aiScore: st === "Flagged" ? 38 + Math.floor(r() * 25) : st === "Verified" ? 88 + Math.floor(r() * 11) : 65 + Math.floor(r() * 25),
           ...(st === "Flagged" ? { flagReason: pick(flagReasons) } : {}),
         });
+        if (st === "Flagged" || st === "Verified" && d === 0) {
+          activity.push({ id: `act-${activity.length + 1}`, at: iso(-Math.max(0, submittedAgo - 2)), actor: "Simulated AI check", actorRole: "system", action: st === "Flagged" ? "flagged document" : "verified document", target: app.ref, institutionId: inst.id, detail: `${name}: Pending → ${st}` });
+        }
       }
 
-      activity.push({ id: `act-${activity.length + 1}`, at: app.submittedOn, actor: "Institution", action: status === "Draft" ? "created draft" : "submitted", target: app.ref, institutionId: inst.id });
+      const rep = `${inst.name.split(" ")[0]} office (demo)`;
+      activity.push({ id: `act-${activity.length + 1}`, at: app.submittedOn, actor: rep, actorRole: "institution", action: status === "Draft" ? "created draft" : "submitted", target: app.ref, institutionId: inst.id, detail: status === "Draft" ? "Status: — → Draft" : "Status: Draft → Submitted" });
       if (status !== "Draft" && status !== "Submitted") {
-        activity.push({ id: `act-${activity.length + 1}`, at: app.updatedOn, actor: app.reviewer, action: `marked ${status.toLowerCase()}`, target: app.ref, institutionId: inst.id });
+        const from = status === "Under Review" ? "Submitted" : "Under Review";
+        activity.push({ id: `act-${activity.length + 1}`, at: app.updatedOn, actor: app.reviewer, actorRole: "admin", action: `marked ${status.toLowerCase()}`, target: app.ref, institutionId: inst.id, detail: `Status: ${from} → ${status}` });
       }
     }
 
@@ -151,20 +156,42 @@ function build(): DemoData {
 
   activity.sort((a, b) => b.at.localeCompare(a.at));
 
-  const notifications: Notification[] = [
-    { id: "n1", at: iso(0), title: "Query raised on AV-2026-4107", body: "Reviewer requested a revised Land Ownership Certificate.", read: false, roles: ["institution", "admin"] },
-    { id: "n2", at: iso(-1), title: "5 documents flagged by simulated AI check", body: "Demo verification found inconsistencies needing manual review.", read: false, roles: ["admin"] },
-    { id: "n3", at: iso(-1), title: "Fire Safety NOC expires in 12 days", body: "Sahyadri Institute of Technology — upload a renewed certificate.", read: false, roles: ["institution", "admin", "faculty"] },
-    { id: "n4", at: iso(-2), title: "New application submitted", body: "Konark Institute of Hotel Management submitted an Extension of Approval.", read: true, roles: ["admin"] },
-    { id: "n5", at: iso(-3), title: "Faculty register update requested", body: "Please confirm your qualification details by Friday.", read: false, roles: ["faculty"] },
-    { id: "n6", at: iso(-4), title: "Scholarship document window open", body: "Students may upload fee receipts for the demo scholarship drive.", read: false, roles: ["student"] },
-    { id: "n7", at: iso(-6), title: "Weekly compliance digest ready", body: "Summary of approvals, rejections and pending items.", read: true, roles: ["admin"] },
-    { id: "n8", at: iso(-8), title: "Profile verified", body: "Your contact details were confirmed (demo).", read: true, roles: ["institution", "faculty", "student"] },
-  ];
+  const notifications = buildNotifications(applications, certificates, institutions);
 
   return { institutions, users, applications, documents, certificates, activity, notifications };
 }
 
 export function createSeedData(): DemoData {
   return build();
+}
+
+const ago = (isoDate: string) => Math.round((Date.now() - new Date(isoDate).getTime()) / DAY);
+
+/** Notifications derived from the same applications and certificates shown elsewhere. */
+function buildNotifications(apps: Application[], certs: Certificate[], insts: Institution[]): Notification[] {
+  const name = (id: string) => insts.find((i) => i.id === id)?.name ?? "";
+  const out: Notification[] = [];
+  for (const a of apps) {
+    const base = { institutionId: a.institutionId, appId: a.id, read: ago(a.updatedOn) > 7 };
+    if (a.status === "Query Raised")
+      out.push({ ...base, id: `n-${a.id}-q`, at: a.updatedOn, kind: "correction", title: `Correction requested on ${a.ref}`, body: `${a.reviewer} asked ${name(a.institutionId)} to revise supporting documents.`, roles: ["admin", "institution"] });
+    else if (a.status === "Approved" || a.status === "Rejected")
+      out.push({ ...base, id: `n-${a.id}-s`, at: a.updatedOn, kind: "status", title: `${a.ref} ${a.status.toLowerCase()}`, body: `${a.type} for ${name(a.institutionId)} was ${a.status.toLowerCase()}.`, roles: ["admin", "institution"] });
+    else if (a.status === "Under Review")
+      out.push({ ...base, id: `n-${a.id}-r`, at: a.updatedOn, kind: "review", title: `${a.ref} is under review`, body: `${a.reviewer} picked up the ${a.type.toLowerCase()} application.`, roles: ["admin", "institution"] });
+  }
+  for (const c of certs) {
+    const left = -ago(c.expiresOn);
+    if (left > 30 || left < -30) continue;
+    out.push({
+      id: `n-${c.id}-e`, at: iso(Math.min(0, left - 30) > -365 ? Math.max(-ago(c.expiresOn) - 30, -20) : 0), kind: "expiry", institutionId: c.institutionId, read: left < 0,
+      title: left < 0 ? `${c.name} expired ${-left} days ago` : `${c.name} expires in ${left} days`,
+      body: `${name(c.institutionId)} — upload a renewed certificate.`, roles: ["admin", "institution", "faculty"],
+    });
+  }
+  out.push(
+    { id: "n-fac-1", at: iso(-3), kind: "general", title: "Faculty register update requested", body: "Please confirm your qualification details by Friday.", read: false, roles: ["faculty"], institutionId: "inst-1" },
+    { id: "n-stu-1", at: iso(-4), kind: "general", title: "Scholarship document window open", body: "Students may upload fee receipts for the demo scholarship drive.", read: false, roles: ["student"], institutionId: "inst-1" },
+  );
+  return out.map((n) => (new Date(n.at).getTime() > Date.now() ? { ...n, at: iso(0) } : n)).sort((a, b) => b.at.localeCompare(a.at));
 }

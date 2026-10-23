@@ -67,7 +67,13 @@ export interface Activity {
   action: string;
   target: string;
   institutionId: string;
+  /** Who acted: a portal role, or the simulated system. */
+  actorRole?: Role | "system";
+  /** What changed, e.g. "Status: Submitted → Under Review". */
+  detail?: string;
 }
+
+export type NotificationKind = "correction" | "status" | "review" | "expiry" | "general";
 
 export interface Notification {
   id: string;
@@ -76,6 +82,10 @@ export interface Notification {
   body: string;
   read: boolean;
   roles: Role[];
+  kind?: NotificationKind;
+  /** Limits non-admin visibility to one institution. */
+  institutionId?: string;
+  appId?: string;
 }
 
 export interface DemoData {
