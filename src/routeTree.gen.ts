@@ -10,33 +10,240 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalRouteImport } from './routes/_portal'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SetupRouteImport } from './routes/setup'
+import { Route as PortalAccountsRouteImport } from './routes/_portal/accounts'
+import { Route as PortalAdminRouteImport } from './routes/_portal/admin'
+import { Route as PortalApplicationsRouteImport } from './routes/_portal/applications'
+import { Route as PortalCalendarRouteImport } from './routes/_portal/calendar'
+import { Route as PortalDocumentsRouteImport } from './routes/_portal/documents'
+import { Route as PortalFacultyRouteImport } from './routes/_portal/faculty'
+import { Route as PortalInstitutionRouteImport } from './routes/_portal/institution'
+import { Route as PortalProfileRouteImport } from './routes/_portal/profile'
+import { Route as PortalReportsRouteImport } from './routes/_portal/reports'
+import { Route as PortalSettingsRouteImport } from './routes/_portal/settings'
+import { Route as PortalStudentRouteImport } from './routes/_portal/student'
+import { Route as PortalVerificationRouteImport } from './routes/_portal/verification'
+import { Route as PortalApplicationsIdRouteImport } from './routes/_portal/applications_.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/_portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetupRoute = SetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalAccountsRoute = PortalAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalAdminRoute = PortalAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalApplicationsRoute = PortalApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalCalendarRoute = PortalCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalDocumentsRoute = PortalDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalFacultyRoute = PortalFacultyRouteImport.update({
+  id: '/faculty',
+  path: '/faculty',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalInstitutionRoute = PortalInstitutionRouteImport.update({
+  id: '/institution',
+  path: '/institution',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalProfileRoute = PortalProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalReportsRoute = PortalReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalSettingsRoute = PortalSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalStudentRoute = PortalStudentRouteImport.update({
+  id: '/student',
+  path: '/student',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalVerificationRoute = PortalVerificationRouteImport.update({
+  id: '/verification',
+  path: '/verification',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalApplicationsIdRoute = PortalApplicationsIdRouteImport.update({
+  id: '/applications_/$id',
+  path: '/applications/$id',
+  getParentRoute: () => PortalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/setup': typeof SetupRoute
+  '/accounts': typeof PortalAccountsRoute
+  '/admin': typeof PortalAdminRoute
+  '/applications': typeof PortalApplicationsRoute
+  '/calendar': typeof PortalCalendarRoute
+  '/documents': typeof PortalDocumentsRoute
+  '/faculty': typeof PortalFacultyRoute
+  '/institution': typeof PortalInstitutionRoute
+  '/profile': typeof PortalProfileRoute
+  '/reports': typeof PortalReportsRoute
+  '/settings': typeof PortalSettingsRoute
+  '/student': typeof PortalStudentRoute
+  '/verification': typeof PortalVerificationRoute
+  '/applications/$id': typeof PortalApplicationsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/setup': typeof SetupRoute
+  '/accounts': typeof PortalAccountsRoute
+  '/admin': typeof PortalAdminRoute
+  '/applications': typeof PortalApplicationsRoute
+  '/calendar': typeof PortalCalendarRoute
+  '/documents': typeof PortalDocumentsRoute
+  '/faculty': typeof PortalFacultyRoute
+  '/institution': typeof PortalInstitutionRoute
+  '/profile': typeof PortalProfileRoute
+  '/reports': typeof PortalReportsRoute
+  '/settings': typeof PortalSettingsRoute
+  '/student': typeof PortalStudentRoute
+  '/verification': typeof PortalVerificationRoute
+  '/applications/$id': typeof PortalApplicationsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_portal': typeof PortalRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/setup': typeof SetupRoute
+  '/_portal/accounts': typeof PortalAccountsRoute
+  '/_portal/admin': typeof PortalAdminRoute
+  '/_portal/applications': typeof PortalApplicationsRoute
+  '/_portal/calendar': typeof PortalCalendarRoute
+  '/_portal/documents': typeof PortalDocumentsRoute
+  '/_portal/faculty': typeof PortalFacultyRoute
+  '/_portal/institution': typeof PortalInstitutionRoute
+  '/_portal/profile': typeof PortalProfileRoute
+  '/_portal/reports': typeof PortalReportsRoute
+  '/_portal/settings': typeof PortalSettingsRoute
+  '/_portal/student': typeof PortalStudentRoute
+  '/_portal/verification': typeof PortalVerificationRoute
+  '/_portal/applications_/$id': typeof PortalApplicationsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/setup'
+    | '/accounts'
+    | '/admin'
+    | '/applications'
+    | '/calendar'
+    | '/documents'
+    | '/faculty'
+    | '/institution'
+    | '/profile'
+    | '/reports'
+    | '/settings'
+    | '/student'
+    | '/verification'
+    | '/applications/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/setup'
+    | '/accounts'
+    | '/admin'
+    | '/applications'
+    | '/calendar'
+    | '/documents'
+    | '/faculty'
+    | '/institution'
+    | '/profile'
+    | '/reports'
+    | '/settings'
+    | '/student'
+    | '/verification'
+    | '/applications/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_portal'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/setup'
+    | '/_portal/accounts'
+    | '/_portal/admin'
+    | '/_portal/applications'
+    | '/_portal/calendar'
+    | '/_portal/documents'
+    | '/_portal/faculty'
+    | '/_portal/institution'
+    | '/_portal/profile'
+    | '/_portal/reports'
+    | '/_portal/settings'
+    | '/_portal/student'
+    | '/_portal/verification'
+    | '/_portal/applications_/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PortalRoute: typeof PortalRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SetupRoute: typeof SetupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +255,169 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_portal': {
+      id: '/_portal'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_portal/accounts': {
+      id: '/_portal/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof PortalAccountsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/admin': {
+      id: '/_portal/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof PortalAdminRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/applications': {
+      id: '/_portal/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof PortalApplicationsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/calendar': {
+      id: '/_portal/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof PortalCalendarRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/documents': {
+      id: '/_portal/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof PortalDocumentsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/faculty': {
+      id: '/_portal/faculty'
+      path: '/faculty'
+      fullPath: '/faculty'
+      preLoaderRoute: typeof PortalFacultyRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/institution': {
+      id: '/_portal/institution'
+      path: '/institution'
+      fullPath: '/institution'
+      preLoaderRoute: typeof PortalInstitutionRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/profile': {
+      id: '/_portal/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof PortalProfileRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/reports': {
+      id: '/_portal/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof PortalReportsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/settings': {
+      id: '/_portal/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof PortalSettingsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/student': {
+      id: '/_portal/student'
+      path: '/student'
+      fullPath: '/student'
+      preLoaderRoute: typeof PortalStudentRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/verification': {
+      id: '/_portal/verification'
+      path: '/verification'
+      fullPath: '/verification'
+      preLoaderRoute: typeof PortalVerificationRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/applications_/$id': {
+      id: '/_portal/applications_/$id'
+      path: '/applications/$id'
+      fullPath: '/applications/$id'
+      preLoaderRoute: typeof PortalApplicationsIdRouteImport
+      parentRoute: typeof PortalRoute
+    }
   }
 }
 
+interface PortalRouteChildren {
+  PortalAccountsRoute: typeof PortalAccountsRoute
+  PortalAdminRoute: typeof PortalAdminRoute
+  PortalApplicationsRoute: typeof PortalApplicationsRoute
+  PortalCalendarRoute: typeof PortalCalendarRoute
+  PortalDocumentsRoute: typeof PortalDocumentsRoute
+  PortalFacultyRoute: typeof PortalFacultyRoute
+  PortalInstitutionRoute: typeof PortalInstitutionRoute
+  PortalProfileRoute: typeof PortalProfileRoute
+  PortalReportsRoute: typeof PortalReportsRoute
+  PortalSettingsRoute: typeof PortalSettingsRoute
+  PortalStudentRoute: typeof PortalStudentRoute
+  PortalVerificationRoute: typeof PortalVerificationRoute
+  PortalApplicationsIdRoute: typeof PortalApplicationsIdRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalAccountsRoute: PortalAccountsRoute,
+  PortalAdminRoute: PortalAdminRoute,
+  PortalApplicationsRoute: PortalApplicationsRoute,
+  PortalCalendarRoute: PortalCalendarRoute,
+  PortalDocumentsRoute: PortalDocumentsRoute,
+  PortalFacultyRoute: PortalFacultyRoute,
+  PortalInstitutionRoute: PortalInstitutionRoute,
+  PortalProfileRoute: PortalProfileRoute,
+  PortalReportsRoute: PortalReportsRoute,
+  PortalSettingsRoute: PortalSettingsRoute,
+  PortalStudentRoute: PortalStudentRoute,
+  PortalVerificationRoute: PortalVerificationRoute,
+  PortalApplicationsIdRoute: PortalApplicationsIdRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PortalRoute: PortalRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SetupRoute: SetupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

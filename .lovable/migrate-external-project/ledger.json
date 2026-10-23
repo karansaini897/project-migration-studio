@@ -1,0 +1,9 @@
+[
+ {"capability":"code","source":"TanStack Start portal app (archive)","outcome":"migrate","status":"verified","next_action":"none"},
+ {"capability":"schema","source":"profiles, user_roles, app_setup","outcome":"migrate","status":"verified","next_action":"none"},
+ {"capability":"storage","source":"profile-photos bucket (private, 2MB)","outcome":"migrate","status":"implemented","next_action":"verify with first photo upload"},
+ {"capability":"auth","source":"admin-provisioned accounts, email/password","outcome":"migrate","status":"implemented","next_action":"verify after first admin is created"},
+ {"capability":"secrets","source":"ADMIN_SETUP_CODE","outcome":"migrate","status":"pending","next_action":"user sets setup code"},
+ {"capability":"records","source":"none attached","outcome":"migrate","status":"pending","next_action":"request CSV/JSON exports"},
+ {"capability":"auth identities","source":"previous backend users","outcome":"migrate","status":"pending","next_action":"request user export"}
+]
